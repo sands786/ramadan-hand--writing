@@ -8,7 +8,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&display=swap');
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { margin: 0; background: #050301; overflow: hidden; touch-action: none; }
+    body { margin: 0; background: #0E0A1E; overflow: hidden; touch-action: none; }
     video { display: none; }
     canvas#c {
       width: 100%; height: 100%;
@@ -275,52 +275,7 @@
       }
     }
 
-    /* ─── moon ─── */
-    function drawMoon(elapsed) {
-      var cycle    = 120000;
-      var progress = (elapsed % cycle) / cycle;
-      var moonFrac = 1.1 - progress * 1.25;
-      var moonX    = c.width  * 0.80;
-      var moonY    = c.height * moonFrac;
-      var moonR    = Math.min(c.width, c.height) * 0.065;
 
-      // Halo rings
-      ctx.save();
-      ctx.strokeStyle = 'rgba(245,208,97,0.06)';
-      ctx.lineWidth   = 1;
-      ctx.beginPath(); ctx.arc(moonX, moonY, moonR * 2.2, 0, Math.PI * 2); ctx.stroke();
-      ctx.strokeStyle = 'rgba(245,208,97,0.04)';
-      ctx.beginPath(); ctx.arc(moonX, moonY, moonR * 3.0, 0, Math.PI * 2); ctx.stroke();
-      ctx.restore();
-
-      // Ambient glow
-      var grd = ctx.createRadialGradient(moonX, moonY, moonR * 0.4, moonX, moonY, moonR * 2.8);
-      grd.addColorStop(0, 'rgba(245,208,97,0.2)');
-      grd.addColorStop(1, 'rgba(245,208,97,0)');
-      ctx.fillStyle = grd;
-      ctx.beginPath();
-      ctx.arc(moonX, moonY, moonR * 2.8, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Bezier crescent — mathematically clean tips
-      ctx.save();
-      ctx.shadowColor = '#F5D061';
-      ctx.shadowBlur  = 30;
-      ctx.fillStyle   = '#FFF4CC';
-      ctx.beginPath();
-      // outer arc (full circle, large) + inner arc (offset circle, same radius scaled)
-      var r1 = moonR;
-      var r2 = moonR * 0.88;
-      var dx = moonR * 0.52;
-      var dy = moonR * -0.18;
-      // outer circle going clockwise
-      ctx.arc(moonX, moonY, r1, -Math.PI * 0.55, Math.PI * 0.55, false);
-      // inner circle (offset) going counter-clockwise — creates crescent
-      ctx.arc(moonX + dx, moonY + dy, r2, Math.PI * 0.55, -Math.PI * 0.55, true);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-    }
 
     /* ─── draw mode ─── */
     function setDrawMode(on) {
@@ -392,18 +347,6 @@
       }
       cx.restore();
 
-      // Moon (static top-right)
-      var mx = cc.width * 0.82, my = cc.height * 0.22, mr = 52;
-      cx.save();
-      cx.shadowColor = '#F5D061'; cx.shadowBlur = 40;
-      cx.fillStyle = '#FFF4CC';
-      cx.beginPath();
-      cx.arc(mx, my, mr, -Math.PI * 0.55, Math.PI * 0.55, false);
-      cx.arc(mx + mr * 0.52, my + mr * -0.18, mr * 0.88, Math.PI * 0.55, -Math.PI * 0.55, true);
-      cx.closePath();
-      cx.fill();
-      cx.restore();
-
       // Replay strokes (mirrored back)
       cx.save();
       cx.translate(cc.width, 0);
@@ -465,11 +408,10 @@
       var elapsed = Date.now() - startTime;
 
       ctx.drawImage(res.image, 0, 0, c.width, c.height);
-      ctx.fillStyle = 'rgba(5,3,1,0.91)';
+      ctx.fillStyle = 'rgba(15,10,30,0.78)';
       ctx.fillRect(0, 0, c.width, c.height);
 
       drawStars(elapsed);
-      drawMoon(elapsed);
       updateParticles();
 
       // Draw strokes with calligraphy width
